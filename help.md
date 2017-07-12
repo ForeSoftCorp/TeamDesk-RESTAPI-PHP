@@ -1,6 +1,6 @@
 ﻿# Methods
 
-* [Construction](#construct)
+* [Construction](#construction)
 * [User](#user)
 * [Describe](#describe)
 * [Describe (Table)](#describetable)
@@ -8,7 +8,7 @@
 * [SelectTop](#selecttop)
 * [Retrieve](#retrieve)
 * [RetrieveByKey](#retrievebykey)
-* [Create/Update/Upsert](#upsert)
+* [Create/Update/Upsert](#createupdateupsert)
 * [Delete](#delete)
 * [DeleteByKey](#deletebykey)
 * [Document](#document)
@@ -25,7 +25,7 @@ Following methods are useful for debugging and return value only if `trace` opti
 * [getLastResponse](#getLastResponse)
 * [dump](#dump)
 
-## Construction {#construct}
+## Construction
 
 ~~~ PHP
 $restAPI = new TeamDesk\RestAPI(array $options);
@@ -55,7 +55,7 @@ Following properties are supported:
 
 ---
 
-## User {#user}
+## User
 
 ~~~ PHP
 function User() : stdClass
@@ -74,7 +74,7 @@ print "Hello " . $result->firstName;
 
 ---
 
-## Describe {#describe}
+## Describe
 
 ~~~ PHP
 function Describe() : stdClass
@@ -93,7 +93,7 @@ print $result->tables[0]->recordsName;
 
 ---
 
-## Describe(table) {#describetable}
+## Describe(table)
 
 ~~~ PHP
 function Describe(string $table) : stdClass
@@ -116,7 +116,7 @@ print $result->columns[0]->name;
 
 ---
 
-## Select {#select}
+## Select
 
 ~~~ PHP
 function Select(string $table, array $columns, string $filter = null, array<string> $sort = null) : array<array>
@@ -142,7 +142,7 @@ print $result[0]["Text"];
 
 ---
 
-## SelectTop {#selecttop}
+## SelectTop
 
 ~~~ PHP
 function Select(string $table, int $top, int $skip, array $columns, string $filter = null, array<string> $sort = null) : array<array>
@@ -170,7 +170,7 @@ print $result[0]["Text"];
 
 ---
 
-## Retrieve {#retrieve}
+## Retrieve
 
 ~~~ PHP
 function Retrieve(string $table, array<string> $columns, array<int> $ids) : array<array>
@@ -195,7 +195,7 @@ print $result[0]["Text"];
 
 ---
 
-## RetrieveByKey {#retrievebykey}
+## RetrieveByKey
 
 ~~~ PHP
 function RetrieveByKey(string $table, array<string> $columns, array<int> $ids) : array<array>
@@ -220,7 +220,7 @@ print $result[0]["Text"];
 
 ---
 
-## Create/Update/Upsert {#upsert}
+## Create/Update/Upsert
 
 ~~~ PHP
 function Create(string $table, array<array> $data, bool $no_workflow = null) : array<stdClass>
@@ -284,7 +284,7 @@ print $result[0]->status >= 400 ? "ERROR: {$status[0]->errors[0]->message}" : "O
 
 ---
 
-## Delete {#delete}
+## Delete
 
 ~~~ PHP
 function Delete(string $table, array<int> $ids, bool $no_workflow = null) : array<array>
@@ -318,7 +318,7 @@ print $result[0]->status >= 400 ? "ERROR: {$status[0]->error->message}" : "OK";
 
 ---
 
-## DeleteByKey {#deletebykey}
+## DeleteByKey
 
 ~~~ PHP
 function DeleteByKey(string $table, array $keys, string $match = null, bool $no_workflow = null) : array<array>
@@ -352,7 +352,7 @@ print $result[0]->status >= 400 ? "ERROR: {$status[0]->error->message}" : "OK";
 
 ---
 
-## Document {#document}
+## Document
 
 ~~~ PHP
 function Document(string $table, string $document, array<int> $ids) : TeamDesk\HttpContent
@@ -378,7 +378,7 @@ $result->passthru(/*withHeaders:*/true);
 
 ---
 
-## Updated {#updated}
+## Updated
 
 ~~~ PHP
 function Updated(string $table, $from = null, $to = null) : array<stdClass>
@@ -408,7 +408,7 @@ print "id: {$result[0]->{"@row.id"}}, modified: {$result[0]->modified}";
 
 ---
 
-## Deleted {#deleted}
+## Deleted
 
 ~~~ PHP
 function Deleted(string $table, $from = null, $to = null) : array<stdClass>
@@ -437,7 +437,7 @@ print "id: {$result[0]->{"@row.id"}}, deleted: {$result[0]->deleted}";
 
 ---
 
-## Attachments {#attachments}
+## Attachments
 
 ~~~PHP
 function Attachments(string $table, string $column, int $id, int $revisions = null) : array<stdClass>
@@ -458,7 +458,7 @@ Array of `stdClass` - attachment revision descriptors.
 
 ---
 
-## AttachmentsByKey {#attachmentsbykey}
+## AttachmentsByKey
 
 ~~~PHP
 function AttachmentsByKey(string $table, string $column, $key, int $revisions = null) : array<stdClass>
@@ -479,7 +479,7 @@ Array of `stdClass` - attachment revision descriptors.
 
 ---
 
-## Attachment {#attachment}
+## Attachment
 
 ~~~PHP
 function Attachment(string $table, string $column, int $id, $revision = 0) : TeamDesk\HttpContent
@@ -507,7 +507,7 @@ $result->passthru();
 
 ---
 
-## AttachmentByKey {#attachmentbykey}
+## AttachmentByKey
 
 ~~~PHP
 function AttachmentByKey(string $table, string $column, $key, $revision = 0) : TeamDesk\HttpContent
@@ -533,7 +533,7 @@ header("Content-Type: " . $result->getHeader("Content-Type"));
 $result->passthru();
 ~~~
 
-## getLastRequest {#getLastRequest}
+## getLastRequest
 
 ~~~ PHP
 function getLastRequest() : TeamDesk\HttpRequest
@@ -545,7 +545,7 @@ Object-oriented wrapper for the data sent to TeamDesk.
   
 ---
 
-## getLastResponse {#getLastResponse}
+## getLastResponse
 
 ~~~ PHP
 function getLastResponse() : TeamDesk\HttpResponse
@@ -557,7 +557,7 @@ Object-oriented wrapper for the data received from TeamDesk.
 
 ---
 
-## dump {#dump}
+## dump
 
 ~~~ PHP
 function dump() : string

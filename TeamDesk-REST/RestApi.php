@@ -4,6 +4,8 @@ require_once("HttpClient.php");
 
 class RestApi
 {
+	const VERSION = "1.0";
+
 	public function __construct(array $options)
 	{
 		$this->options = $options + array(
@@ -60,7 +62,7 @@ class RestApi
 					$this->options["token"] ? 
 						"Bearer " . $this->options["token"] : 
 						"Basic " . base64_encode($this->options["user"] . ":" . $this->options["password"]),
-				"User-Agent" => "TeamDesk.RestApi/1.0 (PHP " . phpversion() . ")",
+				"User-Agent" => "TeamDesk.RestApi/" . self::VERSION . " (PHP " . phpversion() . ")",
 				"Expect" => ""
 			),
 			$curl_opt
@@ -89,7 +91,7 @@ class RestApi
 	{
 		$url = "";
 		if($table != null)
-			$url .= RestApi::urlPathEncode($table) . "/";
+			$url .= self::urlPathEncode($table) . "/";
 		$url .= "describe.json";
 		$o = $this->getJSON($url, 
 			$table != null ? $this->createVars() : null);
@@ -126,7 +128,7 @@ class RestApi
 	public function SelectTop(/*string*/$table, /*int*/$top, /*int*/$skip, array $columns, $filter = null, /*string|array<string>*/$sort = null) /* : array<name=>value>*/ 
 	{
 		$o = $this->getJSON(
-			RestApi::urlPathEncode($table) . "/select.json",
+			self::urlPathEncode($table) . "/select.json",
 			array(
 				"top" => $top ? $top : null,
 				"skip" => $skip ? $skip : null,
@@ -147,7 +149,7 @@ class RestApi
 	*/
 	public function Retrieve(/*string*/$table, array/*<string>*/$columns, /*int|array<int>*/$ids) /* : array<name=>value> */ 
 	{
-		$o = $this->getJSON(RestApi::urlPathEncode($table) . "/retrieve.json",
+		$o = $this->getJSON(self::urlPathEncode($table) . "/retrieve.json",
 			array(
 				"column" => $columns, 
 				"id" => (array)$ids
@@ -166,7 +168,7 @@ class RestApi
 	*/
 	public function RetrieveByKey(/*string*/$table, array/*<string>*/ $columns, /*any|array<any>*/$keys) /* : array<name=>value> */ 
 	{
-		$o = $this->getJSON(RestApi::urlPathEncode($table) . "/retrieve.json",
+		$o = $this->getJSON(self::urlPathEncode($table) . "/retrieve.json",
 			array(
 				"column" => $columns, 
 				"key" => (array)$keys
@@ -196,7 +198,7 @@ class RestApi
 			$no_workflow = $this->options["no-workflow"];
 		$no_workflow = $no_workflow ? 0 : null;
 
-		$o = $this->getJSON(RestApi::urlPathEncode($table) . "/delete.json",
+		$o = $this->getJSON(self::urlPathEncode($table) . "/delete.json",
 			array("id" => (array)$ids, "workflow" => $no_workflow) +
 			$this->createVars());
 		return $o;
@@ -208,7 +210,7 @@ class RestApi
 			$no_workflow = $this->options["no-workflow"];
 		$no_workflow = $no_workflow ? 0 : null;
 
-		$o = $this->getJSON(RestApi::urlPathEncode($table) . "/delete.json",
+		$o = $this->getJSON(self::urlPathEncode($table) . "/delete.json",
 			array("key" => (array)$keys, "workflow" => $no_workflow) +
 			$this->createVars());
 		return $o;
@@ -225,7 +227,7 @@ class RestApi
 	*/
 	public function Updated(/*string*/$table, $from = null, $to = null) // : array<stdClass>
 	{
-		$o = $this->getJSON(RestApi::urlPathEncode($table) . "/updated.json",
+		$o = $this->getJSON(self::urlPathEncode($table) . "/updated.json",
 			 array("from" => $from, "to" => $to));
 		return $o;
 	}
@@ -241,14 +243,14 @@ class RestApi
 	*/
 	public function Deleted(/*string*/$table, $from = null, $to = null) // : array<stdClass>
 	{
-		$o = $this->getJSON(RestApi::urlPathEncode($table) . "/deleted.json",
+		$o = $this->getJSON(self::urlPathEncode($table) . "/deleted.json",
 			 array("from" => $from, "to" => $to));
 		return $o;
 	}
 
 	public function Attachments(/*string*/$table, /*string*/$column, /*int*/$id, /*int*/$revisions = null) // : array<stdClass>
 	{
-		$o = $this->getJSON(RestApi::urlPathEncode($table) . "/" . RestApi::urlPathEncode($column) . "/attachments.json",
+		$o = $this->getJSON(self::urlPathEncode($table) . "/" . self::urlPathEncode($column) . "/attachments.json",
 			 array("id" => $id, "revisions" => $revisions) +
 			 $this->createVars());
 		return $o;
@@ -256,7 +258,7 @@ class RestApi
 
 	public function AttachmentsByKey(/*string*/$table, /*string*/$column, /*any*/$key, /*int*/$revisions = null) // : array<stdClass>
 	{
-		$o = $this->getJSON(RestApi::urlPathEncode($table) . "/" . RestApi::urlPathEncode($column) . "/attachments.json",
+		$o = $this->getJSON(self::urlPathEncode($table) . "/" . self::urlPathEncode($column) . "/attachments.json",
 			 array("key" => $key, "revisions" => $revisions) +
 			 $this->createVars());
 		return $o;
@@ -279,7 +281,7 @@ class RestApi
 		{
 			$revision = null;
 		}
-		$content = $this->getContent("GET", RestApi::urlPathEncode($table) . "/" . RestApi::urlPathEncode($column) . "/attachment",
+		$content = $this->getContent("GET", self::urlPathEncode($table) . "/" . self::urlPathEncode($column) . "/attachment",
 			 array("id" => $id, "guid" => $guid, "revision" => $revision) +
 			 $this->createVars());
 		return $content;
@@ -302,7 +304,7 @@ class RestApi
 		{
 			$revision = null;
 		}
-		$content = $this->getContent("GET", RestApi::urlPathEncode($table) . "/" . RestApi::urlPathEncode($column) . "/attachment",
+		$content = $this->getContent("GET", self::urlPathEncode($table) . "/" . self::urlPathEncode($column) . "/attachment",
 			 array("key" => $key, "guid" => $guid, "revision" => $revision) +
 			 $this->createVars());
 		return $content;
@@ -318,7 +320,7 @@ class RestApi
 	*/
 	public function Document(/*string*/$table, /*string*/$document, /*int|array<int>*/$ids) // : TeamDesk\HttpContent
 	{
-		$content = $this->getContent("GET", RestApi::urlPathEncode($table) . "/" . RestApi::urlPathEncode($document) . "/document",
+		$content = $this->getContent("GET", self::urlPathEncode($table) . "/" . self::urlPathEncode($document) . "/document",
 			array("id" => $ids) +
 			$this->createVars());
 		return $content;
@@ -400,11 +402,11 @@ class RestApi
 				$content->addPart($filePart);
 		}
 
-		$content = $this->getContent("POST", RestApi::urlPathEncode($table) . "/$method.json", 
+		$content = $this->getContent("POST", self::urlPathEncode($table) . "/$method.json", 
 			array("match" => $match, "workflow" => $no_workflow) +
 			$this->createVars(),
 			$content);
-		return RestApi::parseJson($content);
+		return self::parseJson($content);
 	}
 
 	private function createVars() /* : array<name=>value> */
@@ -425,7 +427,7 @@ class RestApi
 		if(isset($contentType["charset"]) && strcasecmp($contentType["charset"], "UTF-8") != 0)
 			$data = mb_convert_encoding($data,  "UTF-8", $contentType["charset"]);
 		$data = json_decode($data, $use_arrays);
-		RestApi::convertutf8($data);
+		self::convertutf8($data);
 		return $data;
 	}
 
@@ -434,12 +436,12 @@ class RestApi
 		if(is_object($value))
 		{
 			foreach($value as $k=>$v)
-				 RestApi::convertutf8($value->$k);
+				 self::convertutf8($value->$k);
 		}
 		else if(is_array($value))
 		{
 			foreach($value as $k=>$v)
-				 RestApi::convertutf8($value[$k]);
+				 self::convertutf8($value[$k]);
 		}
 		else if(is_string($value))
 		{
@@ -456,7 +458,7 @@ class RestApi
 				$contentType = HttpMessage::parseHeader($response->content->getHeader("Content-Type"));
 				if($contentType && strcasecmp($contentType["type"], "application/json") == 0)
 				{
-					$error = RestApi::parseJson($response->content);
+					$error = self::parseJson($response->content);
 					throw new RestApiException(
 						$error->message,
 						$error->error,
@@ -470,7 +472,7 @@ class RestApi
 
 	private function getContent(/*string*/$method, /*string*/$url, array/*<name=>value>*/$params = null, /*TeamDesk\HttpContent*/$content = null) /* : TeamDesk\HttpContent */
 	{
-		$request = $this->client->createRequest($method, $this->options["url"] . $url . RestApi::queryString($params), $content);
+		$request = $this->client->createRequest($method, $this->options["url"] . $url . self::queryString($params), $content);
 		if($this->options["trace"])
 		{
 			$this->lastRequest = $request;
@@ -486,7 +488,7 @@ class RestApi
 	private function getJSON(/*string*/$url, array/*<name=>value>*/$params = null, $use_arrays = false) /* : any */
 	{
 		$content = $this->getContent("GET", $url, $params);
-		return RestApi::parseJson($content, $use_arrays);
+		return self::parseJson($content, $use_arrays);
 	}
 
 	private static function queryString(/*array*/$data) /* : string */
@@ -500,11 +502,11 @@ class RestApi
 			if(is_array($v))
 			{
 				for($i = 0; $i < count($v); $i++)
-					$result[] = $k . "=" . RestApi::urlEncode($v[$i]);
+					$result[] = $k . "=" . self::urlEncode($v[$i]);
 			}
 			else if($v != null)
 			{
-				$result[] = $k . "=" . RestApi::urlEncode($v);
+				$result[] = $k . "=" . self::urlEncode($v);
 			}
 		}
 		$result = count($result) ? "?" . implode($result, "&") : "";
@@ -513,7 +515,7 @@ class RestApi
 
 	private static function urlPathEncode(/*string*/$value) /* : string */
 	{
-		return RestApi::urlEncode(strtr($value, array("%" => "%25",  "/" => "%2F",  "\\" => "%5C",  "?" => "%3F")));
+		return self::urlEncode(strtr($value, array("%" => "%25",  "/" => "%2F",  "\\" => "%5C",  "?" => "%3F")));
 	}
 
 	private static function urlEncode(/*string*/$value) /* : string */

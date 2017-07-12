@@ -6,6 +6,7 @@ Requires PHP 5.3+ with cURL extension.
 
 Implements data decompression and optional [caching](#caching) to improve performance.
 
+If you are planning to migrate from SOAP API, consider reading [migration notes](#migration-from-soap-api).
 
 ## Quick example
 
@@ -27,15 +28,17 @@ var_dump($result);
 
 ## Samples
 
-* [Retrieve metadata](blob/master/samples/describe.php)
-* [Select records with pagination](blob/master/samples/select.php)
-* [Select records with pagination and caching](blob/master/samples/cache.php)
-* [Retrieve records by id or key](blob/master/samples/retrieve.php)
-* [Get attachment file](blob/master/samples/attachment.php)
-* [Create, Update, Upsert, Delete](blob/master/samples/upsert.php)
-* [Generate document](blob/master/samples/document.php)
+* [Retrieve metadata](samples/describe.php)
+* [Select records with pagination](samples/select.php)
+* [Select records with pagination and caching](samples/cache.php)
+* [Retrieve records by id or key](samples/retrieve.php)
+* [Get attachment file](samples/attachment.php)
+* [Create, Update, Upsert, Delete](samples/upsert.php)
+* [Generate document](samples/document.php)
+* [Debug/Trace](samples/trace.php)
 
-## Caching {#caching}
+
+## Caching
 
 Caching allows TeamDesk to quickly check whether the data requested was not modified since the last call and skip data retrieval for locally cached copy from last call. 
 
@@ -54,9 +57,9 @@ $restAPI = new TeamDesk\RestApi([
 
 For your convenicence we've implemented three types of cache:
 
-* [DiskCache](blob/master/TeamDesk-REST/DiskCache.php) for use with the file system
-* [MemCache](blob/master/TeamDesk-REST/MemCache.php) - in-memory cache using Memcached extension
-* [WinCache](blob/master/TeamDesk-REST/WinCache.php) - in-memory cache using Wincache extension
+* [DiskCache](TeamDesk-REST/DiskCache.php) for use with the file system
+* [MemCache](TeamDesk-REST/MemCache.php) - in-memory cache using Memcached extension
+* [WinCache](TeamDesk-REST/WinCache.php) - in-memory cache using Wincache extension
 
 Though you can easily implement your own caching scheme, for example, using local database.
 

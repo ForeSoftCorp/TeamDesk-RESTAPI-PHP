@@ -154,7 +154,7 @@ class HttpContent
 	
 	public static function fromString($value, $mediaType, $charSet = "UTF-8")
 	{
-		return HttpContent::fromData(mb_convert_encoding($value, $charSet), "$mediaType;charset=$charSet");
+		return self::fromData(mb_convert_encoding($value, $charSet), "$mediaType;charset=$charSet");
 	}
 
 	public static function fromFile($path, $contentType = null)
@@ -164,7 +164,6 @@ class HttpContent
 
 	protected /*array*/$headers;
 	protected /*mixed*/$data;
-
 }
 
 class FileContent extends HttpContent
@@ -434,7 +433,7 @@ class HttpResponse extends HttpMessage
 			throw new \Exception("Failed to open memory stream");
 		fwrite($handle, $data);
 		rewind($handle);
-		$result = HttpResponse::fromResource($handle);
+		$result = self::fromResource($handle);
 		fclose($handle);
 		return $result;
 	}
