@@ -12,15 +12,11 @@ try
 				"database" => Utils::$database, 
 				"user" => Utils::$user, 
 				"password" => Utils::$password, 
-				"trace"=>true,
+				"trace" => true,
 				"ssl-verification" => Utils::$sslVerification)
 			);
 
-	$result = $restAPI->Select("Test", array(
-		"top" => 1,
-		"column" => array("File"),
-		"filter" => "Begins([File], \"logo.png;\")"
-	));
+	$result = $restAPI->SelectTop("Test", 1, 0, array("File"), "Begins([File], \"logo.png;\")");
 
 	if(count($result) == 1)
 	{
@@ -29,9 +25,8 @@ try
 		{
 			$result = $restAPI->Attachment("Test", "File", $row["@row.id"], $row["File"]);
 			ob_clean();
-			echo $restAPI->Dump();
-			// header("Content-Type: " . $result->getHeader("Content-Type"));
-			// $result->passthru();
+			header("Content-Type: " . $result->getHeader("Content-Type"));
+			$result->passthru();
 			exit();
 		}
 		else

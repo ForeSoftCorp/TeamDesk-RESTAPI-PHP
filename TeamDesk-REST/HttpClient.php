@@ -427,6 +427,18 @@ class HttpResponse extends HttpMessage
 		}
 	}
 
+	public static function readString(/*string*/$data)
+	{
+		$handle = fopen("php://temp","r+b");
+		if($handle === false)
+			throw new \Exception("Failed to open memory stream");
+		fwrite($handle, $data);
+		rewind($handle);
+		$result = HttpResponse::fromResource($handle);
+		fclose($handle);
+		return $result;
+	}
+
 	public static function fromResource($handle)
 	{
 		$result = new HttpResponse();
@@ -444,6 +456,18 @@ class HttpResponse extends HttpMessage
 	{
 		fwrite($handle, "HTTP/$this->version $this->statusCode $this->statusText\r\n");
 		parent::write($handle);
+	}
+
+	public function writeString()
+	{
+		$handle = fopen("php://temp","r+b");
+		if($handle === false)
+			throw new \Exception("Failed to open memory stream");
+		$this->write($handle);
+		rewind($handle);
+		$result = stream_get_contents($handle);
+		fclose($handle);
+		return $result;
 	}
 
 	public function __toString()
@@ -567,7 +591,7 @@ class HttpClient
 				throw new \Exception("CURL: " . $curl_error);
 			$responseData = fopen("php://temp","r+b");
 			if($responseData === false)
-				throw new \Exception("Failed to open memory stream", 500, 0);
+				throw new \Exception("Failed to open memory stream");
 
 			fwrite($responseData, $responseText);
 			rewind($responseData);

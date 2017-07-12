@@ -96,20 +96,33 @@ class RestApi
 		return $o;
 	}
 
-	/*
-		$options = array(
-			top => 1..500,
-			skip => integer, records to skip
-			filter => "<formula expression>"
-			column => array("Column1", "Column 2", ... )
-			sort => array("Column1//ASC", "Column 2//DESC", ... )
-		)
+	/**
+	*	Retrieves the data from the table.
+	*
+	*	@param string	$table Table alias or name in a singular form.
+	*	@param array	$columns Array of column names or aliases to retrieve.
+	*	@param string	$filter Optional string containing filter expression text.
+	*	@param array	$sort Optional array of column names to sort by.
+	*
+	*	@return array An array of records, each record is represented as associative name=>value array.
 	*/
 	public function Select(/*string*/$table, array $columns, $filter = null, /*string|array<string>*/$sort = null) /* : array<name=>value>*/ 
 	{
-		return SelectTop($table, null, null, $columns, $filter, $sort);
+		return $this->SelectTop($table, null, null, $columns, $filter, $sort);
 	}
 
+	/**
+	*	Retrieves the data from the table.
+	*
+	*	@param string	$table	Table alias or name in a singular form.
+	*	@param int		$top	Number of records to retrieve.
+	*	@param int		$skip	Number of records to skip prior to retrieval.
+	*	@param array	$columns Array of column names or aliases to retrieve.
+	*	@param string	$filter	Optional string containing filter expression text.
+	*	@param array	$sort	Optional array of column names to sort by.
+	*
+	*	@return array An array of records, each record is represented as associative name=>value array.
+	*/
 	public function SelectTop(/*string*/$table, /*int*/$top, /*int*/$skip, array $columns, $filter = null, /*string|array<string>*/$sort = null) /* : array<name=>value>*/ 
 	{
 		$o = $this->getJSON(
@@ -162,9 +175,9 @@ class RestApi
 		return $o;
 	}
 
-	public function Create(/*string*/$table, array/*<name=>value>*/ $data, /*string*/$match = null, /*bool*/$no_workflow = null) // : array<stdClass>
+	public function Create(/*string*/$table, array/*<name=>value>*/ $data, /*bool*/$no_workflow = null) // : array<stdClass>
 	{
-		return $this->doUpsert("create", $table, $data, $match, $no_workflow);
+		return $this->doUpsert("create", $table, $data, null, $no_workflow);
 	}
 
 	public function Update(/*string*/$table, array/*<name=>value>*/ $data, /*string*/$match = null, /*bool*/$no_workflow = null) // : array<stdClass>
@@ -201,6 +214,15 @@ class RestApi
 		return $o;
 	}
 
+	/*
+	* Retrieves the list of updated records
+	*
+	* @param	string	$table	Table alias or name in a singular form.
+	* @param	string	$from	Optional start date
+	* @param	string  $to		Optional end date
+	*
+	* @return	array	Array of stdClass
+	*/
 	public function Updated(/*string*/$table, $from = null, $to = null) // : array<stdClass>
 	{
 		$o = $this->getJSON(RestApi::urlPathEncode($table) . "/updated.json",
@@ -208,6 +230,15 @@ class RestApi
 		return $o;
 	}
 
+	/*
+	* Retrieves the list of deleted records
+	*
+	* @param	string	$table	Table alias or name in a singular form.
+	* @param	string	$from	Optional start date
+	* @param	string  $to		Optional end date
+	*
+	* @return	array	Array of stdClass
+	*/
 	public function Deleted(/*string*/$table, $from = null, $to = null) // : array<stdClass>
 	{
 		$o = $this->getJSON(RestApi::urlPathEncode($table) . "/deleted.json",
@@ -234,9 +265,14 @@ class RestApi
 	public function Attachment(/*string*/$table, /*string*/$column, /*int*/$id, /*int|column's value|guid*/$revision = 0) // : TeamDesk\HttpContent
 	{
 		$guid = null;
-		if(is_string($revision) && preg_match("/.+;\\d+;([0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12})/", $revision, $guid))
+		if($revision == null)
+			return null;
+		if(is_string($revision))
 		{
-			$guid = $guid[1];
+			if(preg_match("/.+;\\d+;([0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12})/", $revision, $guid))
+				$guid = $guid[1];
+			else
+				$guid = $revision;
 			$revision = null;
 		}
 		else if($revision == 0)
@@ -252,9 +288,18 @@ class RestApi
 	public function AttachmentByKey(/*string*/$table, /*string*/$column, $key, /*int|column's value|guid*/$revision = 0) // : TeamDesk\HttpContent
 	{
 		$guid = null;
+		if($revision == null)
+			return null;
 		if(is_string($revision))
 		{
-			$guid = $revision;
+			if(preg_match("/.+;\\d+;([0-9A-Fa-f]{8}(?:-[0-9A-Fa-f]{4}){3}-[0-9A-Fa-f]{12})/", $revision, $guid))
+				$guid = $guid[1];
+			else
+				$guid = $revision;
+			$revision = null;
+		}
+		else if($revision == 0)
+		{
 			$revision = null;
 		}
 		$content = $this->getContent("GET", RestApi::urlPathEncode($table) . "/" . RestApi::urlPathEncode($column) . "/attachment",
@@ -271,10 +316,10 @@ class RestApi
 	* @param	array		$id			An array internal record IDs
 	* @return	TeamDesk\HttpContent	An instance of TeamDesk\HttpContent class
 	*/
-	public function Document(/*string*/$table, /*string*/$document, /*int|array<int>*/$id) // : TeamDesk\HttpContent
+	public function Document(/*string*/$table, /*string*/$document, /*int|array<int>*/$ids) // : TeamDesk\HttpContent
 	{
 		$content = $this->getContent("GET", RestApi::urlPathEncode($table) . "/" . RestApi::urlPathEncode($document) . "/document",
-			array("id" => $id) +
+			array("id" => $ids) +
 			$this->createVars());
 		return $content;
 	}
@@ -411,7 +456,7 @@ class RestApi
 				$contentType = HttpMessage::parseHeader($response->content->getHeader("Content-Type"));
 				if($contentType && strcasecmp($contentType["type"], "application/json") == 0)
 				{
-					$error = parseJson($response->content);
+					$error = RestApi::parseJson($response->content);
 					throw new RestApiException(
 						$error->message,
 						$error->error,
@@ -448,6 +493,7 @@ class RestApi
 	{
 		if($data == null)
 			return "";
+		var_dump($data);
 		$result = array();
 		foreach($data as $k => $v)
 		{

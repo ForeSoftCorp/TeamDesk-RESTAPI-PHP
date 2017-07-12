@@ -26,15 +26,13 @@ class DiskCache implements IHttpCache
 				throw new \Exception("Failed to read cache file \"$cacheFile\"");
 			try
 			{
-				$result = new HttpResponse();
-				$result->read($handle);
+				$result = HttpResponse::fromResource($handle);
 				fclose($handle);
 				return $result;
 			}
 			catch(\Exception $e)
 			{
 				fclose($handle);
-				$result = null;
 				throw $e;
 			}
 		}

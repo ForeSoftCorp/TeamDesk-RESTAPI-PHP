@@ -16,22 +16,29 @@ try
 			"user" => Utils::$user, 
 			"password" => Utils::$password, 
 			"ssl-verification" => Utils::$sslVerification));
+	
+	// Get user info
+	$userDescription = $restAPI->User();
 
+	echo "<ul>";
+
+	echo "<li>Hello " . htmlentities($userDescription->firstName . " " . $userDescription->lastName);
 
 	// Describe Database
 	$dbDescription = $restAPI->Describe();
 
-	echo "Database name: " . htmlentities($dbDescription->name) . "<br>";
+	echo "<li>Database name: " . htmlentities($dbDescription->name);
 
 	// Get first short table descriptor
 	$firstTable = $dbDescription->tables[0];
 
-	echo "<br>First table is: " . htmlentities($firstTable->recordsName) . "<br>";
+	echo "<li>First table is: " . htmlentities($firstTable->recordsName);
 
 	// Get full table description for first table, by alias or by name in singular form ($firstTable->recordName)
 	$tableDescription = $restAPI->Describe($firstTable->alias);
 
-	echo "<br>First column is: " . htmlentities($tableDescription->columns[0]->name);
+	echo "<li>First column is: " . htmlentities($tableDescription->columns[0]->name);
+	echo "</ul>";
 }
 catch(Exception $e)
 {
