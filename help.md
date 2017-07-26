@@ -6,6 +6,8 @@
 * [Describe (Table)](#describetable)
 * [Select](#select)
 * [SelectTop](#selecttop)
+* [SelectView](#selectview)
+* [SelectViewTop](#selectviewtop)
 * [Retrieve](#retrieve)
 * [RetrieveByKey](#retrievebykey)
 * [Create/Update/Upsert](#createupdateupsert)
@@ -145,7 +147,7 @@ print $result[0]["Text"];
 ## SelectTop
 
 ~~~ PHP
-function Select(string $table, int $top, int $skip, array $columns, string $filter = null, array<string> $sort = null) : array<array>
+function SelectTop(string $table, int $skip, int $top, array $columns, string $filter = null, array<string> $sort = null) : array<array>
 ~~~
 
 Version of Select() exteneded with top and skip parameters to enable paginated queries.
@@ -153,8 +155,8 @@ Version of Select() exteneded with top and skip parameters to enable paginated q
 **Parameters**
 
 * `$table` is a table alias or name in a singular form.
-* `$top` is a number of records to retrieve.
 * `$skip` is a number of records to skip prior to retrieval.
+* `$top` is a number of records to retrieve.
 * `$columns` is an array of column names or aliases to retrieve.
 * `$filter` is an optional string containing filter expression
 * `$sort` is an optional array of column names to sort by.
@@ -165,6 +167,58 @@ An array of records, each record is represented as associative name=>value array
 
 ~~~ PHP
 $result = $restAPI->Select("Test", 10, 30, [ "Text", "Date" ], "not IsBlank([Date])");
+print $result[0]["Text"];
+~~~
+
+---
+
+## SelectView
+
+~~~ PHP
+function SelectView(string $table, string $view, string $filter = null) : array<array>
+~~~
+
+Retrieves the data from the table via the view.
+
+**Parameters**
+
+* `$table` is a table alias or name in a singular form.
+* `$view` is a view alias or name.
+* `$filter` is an optional string containing filter expression text to apply in addition to view's own filter.
+
+**Returns**
+
+An array of records, each record is represented as associative name=>value array.
+
+~~~ PHP
+$result = $restAPI->SelectView("Test", "List All");
+print $result[0]["Text"];
+~~~
+
+---
+
+## SelectViewTop
+
+~~~ PHP
+function SelectView(string $table, string $view, int $skip, int $top, string $filter = null) : array<array>
+~~~
+
+Retrieves the data from the table via the view.
+
+**Parameters**
+
+* `$table` is a table alias or name in a singular form.
+* `$view` is a view alias or name.
+* `$skip` is a number of records to skip prior to retrieval.
+* `$top` is a number of records to retrieve.
+* `$filter` is an optional string containing filter expression text to apply in addition to view's own filter.
+
+**Returns**
+
+An array of records, each record is represented as associative name=>value array.
+
+~~~ PHP
+$result = $restAPI->SelectView("Test", "List All", 0, 40);
 print $result[0]["Text"];
 ~~~
 

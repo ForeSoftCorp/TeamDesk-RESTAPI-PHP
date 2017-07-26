@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>Retrieve - TeamDesk REST API Sample</title>
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 <h1>Retrieve Method</h1>

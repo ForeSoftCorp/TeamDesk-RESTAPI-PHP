@@ -16,7 +16,7 @@ try
 				"ssl-verification" => Utils::$sslVerification)
 			);
 
-	$result = $restAPI->SelectTop("Test", 1, 0, array("File"), "Begins([File], \"logo.png;\")");
+	$result = $restAPI->SelectTop("Test", 0, 1, array("File"), "Begins([File], \"logo.png;\")");
 
 	if(count($result) == 1)
 	{

@@ -1,0 +1,25 @@
+﻿html {
+	font: normal 9pt Arial
+}
+
+table {
+	border-collapse: collapse;
+}
+
+tr:nth-of-type(2n) {
+	background-color: #DDD;
+}
+
+th, td {
+	padding: 4px 8px;
+	border: solid 1px #888;
+}
+
+th:not(:last-child) {
+	border-right: solid 1px #FFF;
+}
+
+thead, tfoot {
+	background-color: #888;
+	color: #FFF;
+}

@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>Caching - TeamDesk REST API Sample</title>
+<link rel="stylesheet" href="style.css"/>
 <meta charset="windows-1251">
 </head>
 <body>
@@ -48,7 +49,7 @@ try
 	$sort = "Date//DESC";
 	
 	// Select Records
-	$data = $restAPI->SelectTop("Test", /*top*/PAGE_SIZE, /*skip*/($pageNum - 1) * PAGE_SIZE, $columns, $filter, $sort);
+	$data = $restAPI->SelectTop("Test", /*skip*/($pageNum - 1) * PAGE_SIZE, /*top*/PAGE_SIZE, $columns, $filter, $sort);
 
 	echo "<h2>Page #$pageNum: " . ($restAPI->getLastResponse()->fromCache ? "cached" : "not cached") . "</h2>";
 	Utils::dumpTable($data);

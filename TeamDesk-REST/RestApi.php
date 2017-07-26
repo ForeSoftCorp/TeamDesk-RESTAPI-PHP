@@ -117,15 +117,15 @@ class RestApi
 	*	Retrieves the data from the table.
 	*
 	*	@param string	$table	Table alias or name in a singular form.
-	*	@param int		$top	Number of records to retrieve.
 	*	@param int		$skip	Number of records to skip prior to retrieval.
+	*	@param int		$top	Number of records to retrieve.
 	*	@param array	$columns Array of column names or aliases to retrieve.
 	*	@param string	$filter	Optional string containing filter expression text.
 	*	@param array	$sort	Optional array of column names to sort by.
 	*
 	*	@return array An array of records, each record is represented as associative name=>value array.
 	*/
-	public function SelectTop(/*string*/$table, /*int*/$top, /*int*/$skip, array $columns, $filter = null, /*string|array<string>*/$sort = null) /* : array<name=>value>*/ 
+	public function SelectTop(/*string*/$table, /*int*/$skip, /*int*/$top, array $columns, $filter = null, /*string|array<string>*/$sort = null) /* : array<name=>value>*/ 
 	{
 		$o = $this->getJSON(
 			self::urlPathEncode($table) . "/select.json",
@@ -134,7 +134,46 @@ class RestApi
 				"skip" => $skip ? $skip : null,
 				"column" => $columns,
 				"filter" => $filter,
-				"sort" => (array)$sort), 
+				"sort" => (array)$sort
+			) + $this->createVars(), 
+			true);
+		return $o;
+	}
+
+	/**
+	*	Retrieves the data from the table.
+	*
+	*	@param string	$table Table alias or name in a singular form.
+	*	@param string	$view  View alias or name.
+	*	@param string	$filter Optional string containing filter expression text to apply in addition to view's own filter.
+	*
+	*	@return array An array of records, each record is represented as associative name=>value array.
+	*/
+	public function SelectView(/*string*/$table, /*string*/$view, $filter = null) /* : array<name=>value>*/ 
+	{
+		return $this->SelectViewTop($table, $view, null, null, $filter);
+	}
+
+	/**
+	*	Retrieves the data from the table.
+	*
+	*	@param string	$table Table alias or name in a singular form.
+	*	@param string	$view  View alias or name.
+	*	@param int		$skip	Number of records to skip prior to retrieval.
+	*	@param int		$top	Number of records to retrieve.
+	*	@param string	$filter Optional string containing filter expression text to apply in addition to view's own filter.
+	*
+	*	@return array An array of records, each record is represented as associative name=>value array.
+	*/
+	public function SelectViewTop(/*string*/$table, /*string*/$view, /*int*/$skip, /*int*/$top, $filter = null, /*string|array<string>*/$sort = null) /* : array<name=>value>*/ 
+	{
+		$o = $this->getJSON(
+			self::urlPathEncode($table) . "/" . self::urlPathEncode($view) . "/select.json",
+			array(
+				"top" => $top ? $top : null,
+				"skip" => $skip ? $skip : null,
+				"filter" => $filter
+			) + $this->createVars(), 
 			true);
 		return $o;
 	}
@@ -495,7 +534,6 @@ class RestApi
 	{
 		if($data == null)
 			return "";
-		var_dump($data);
 		$result = array();
 		foreach($data as $k => $v)
 		{

@@ -31,6 +31,8 @@ var_dump($result);
 * [Retrieve metadata](samples/describe.php)
 * [Select records with pagination](samples/select.php)
 * [Select records with pagination and caching](samples/cache.php)
+* [Calculate aggregate values](samples/selectagg.php)
+* [Select view content](samples/selectview.php)
 * [Retrieve records by id or key](samples/retrieve.php)
 * [Get attachment file](samples/attachment.php)
 * [Create, Update, Upsert, Delete](samples/upsert.php)
@@ -112,7 +114,7 @@ While migrating, please keep in mind that:
   ~~~PHP
   $soapAPI->Query("SELECT TOP 10 [Column1], [Column2] FROM [Table] WHERE 1<>0 ORDER BY [Column1], [Column2] DESC");
   // becomes
-  $restAPI->SelectTop(/*FROM:*/"Table", /*TOP:*/10, /*skip:*/0, /*columns:*/["Column1", "Column2"], /*WHERE:*/"1<>0", /*ORDER BY:*/["Column1", "Column2"]);
+  $restAPI->SelectTop(/*FROM:*/"Table", /*skip:*/0, /*TOP:*/10, /*columns:*/["Column1", "Column2"], /*WHERE:*/"1<>0", /*ORDER BY:*/["Column1", "Column2"]);
   ~~~ 
 * There is no separate SetAttachment method, pass file's data directly to Create/Update/Upsert methods.
   ~~~PHP

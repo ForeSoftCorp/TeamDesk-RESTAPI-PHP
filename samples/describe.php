@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>Describe - TeamDesk REST API Sample</title>
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 <h1>Describe Method</h1>

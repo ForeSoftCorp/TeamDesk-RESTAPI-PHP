@@ -1,10 +1,10 @@
-﻿<html>
+<html>
 <head>
-<title>Trace - TeamDesk REST API Sample</title>
+<title>Select View - TeamDesk REST API Sample</title>
 <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-<h1>Request/Response tracing</h1>
+<h1>Select View Method</h1>
 <?php 
 require_once("../TeamDesk-REST/RestApi.php");
 require_once("utils.php");
@@ -14,17 +14,19 @@ try
 	$restAPI = new TeamDesk\RestApi(
 			array(
 				"database" => Utils::$database, 
-				"token" => "nosuchtoken", 
-				"trace" => true,
+				"user" => Utils::$user, 
+				"password" => Utils::$password,
 				"ssl-verification" => Utils::$sslVerification)
 			);
+	
+	// Select Records
+	$data = $restAPI->SelectView("Test", "List All");
 
-	// this will trigger an Exception
-	$restAPI->User();
+	Utils::dumpTable($data);
 }
 catch(Exception $e)
 {
-	echo "<pre><code>" . htmlentities($restAPI->dump()) . "</code></pre>";
+	echo "<pre><code>ERROR: " . htmlentities($e) . "</code></pre>";
 }
 ?>
 </body>

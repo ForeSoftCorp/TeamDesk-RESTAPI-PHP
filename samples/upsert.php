@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>Create/Update/Delete - TeamDesk REST API Sample</title>
+<link rel="stylesheet" href="style.css"/>
 </head>
 <body>
 <h1>Create/Update/Delete Methods</h1>
