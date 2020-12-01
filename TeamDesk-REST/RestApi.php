@@ -410,7 +410,7 @@ class RestApi
 			else if(is_object($row))
 				$data[$i] = $row = clone $object;
 			else
-				throw \Exception("Expected object or array at index $i");
+				throw new \Exception("Expected object or array at index $i");
 			foreach($row as $n => $v)
 			{
 				if($v instanceof \DateTime)
@@ -429,7 +429,7 @@ class RestApi
 					$row->$n = mb_convert_encoding($v, "UTF-8");
 				}
 				else if(is_object($v) || is_array($v))
-					throw \Exception("Expected primitive content at index $i, key => \"$n\"");
+					throw new \Exception("Expected primitive content at index $i, key => \"$n\"");
 			}
 		}
 		$content = $dataPart = HttpContent::fromData(json_encode($data), "application/json;charset=UTF-8");
