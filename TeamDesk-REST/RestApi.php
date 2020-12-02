@@ -233,7 +233,7 @@ class RestApi
 
 	public function Delete(/*string*/$table, /*int|array<int>*/$ids, /*bool*/$no_workflow = null) // : array<stdClass>
 	{
-		if($no_workflow == null)
+		if($no_workflow === null)
 			$no_workflow = $this->options["no-workflow"];
 		$no_workflow = $no_workflow ? 0 : null;
 
@@ -245,7 +245,7 @@ class RestApi
 
 	public function DeleteByKey(/*string*/$table, /*any|array<any>*/$keys, /*string*/$match = null, /*bool*/$no_workflow = null) // : array<stdClass>
 	{
-		if($no_workflow == null)
+		if($no_workflow === null)
 			$no_workflow = $this->options["no-workflow"];
 		$no_workflow = $no_workflow ? 0 : null;
 
@@ -306,7 +306,7 @@ class RestApi
 	public function Attachment(/*string*/$table, /*string*/$column, /*int*/$id, /*int|column's value|guid*/$revision = 0) // : TeamDesk\HttpContent
 	{
 		$guid = null;
-		if($revision == null)
+		if($revision === null)
 			return null;
 		if(is_string($revision))
 		{
@@ -329,7 +329,7 @@ class RestApi
 	public function AttachmentByKey(/*string*/$table, /*string*/$column, $key, /*int|column's value|guid*/$revision = 0) // : TeamDesk\HttpContent
 	{
 		$guid = null;
-		if($revision == null)
+		if($revision === null)
 			return null;
 		if(is_string($revision))
 		{
@@ -397,7 +397,7 @@ class RestApi
 
 	private function doUpsert($method, $table, array $data, $match, $no_workflow)
 	{
-		if($no_workflow == null)
+		if($no_workflow === null)
 			$no_workflow = $this->options["no-workflow"];
 		$no_workflow = $no_workflow ? 0 : null;
 
@@ -542,7 +542,7 @@ class RestApi
 				for($i = 0; $i < count($v); $i++)
 					$result[] = $k . "=" . self::urlEncode($v[$i]);
 			}
-			else if($v != null)
+			else if($v !== null)
 			{
 				$result[] = $k . "=" . self::urlEncode($v);
 			}
